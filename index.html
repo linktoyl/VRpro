@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VR测试</title>
+    <meta name="viewport" content="initial-scale=1.0"/>
+
+    <link rel="stylesheet" href="css/photo-sphere-viewer.min.css"/>
+
+    <script src="js/three/three.min.js"></script>
+    <script src="js/three/renderers/CanvasRenderer.js"></script>
+    <script src="js/three/renderers/Projector.js"></script>
+    <script src="js/D.min.js"></script>
+    <script src="js/doT.min.js"></script>
+    <script src="js/uevent.min.js"></script>
+    <script src="js/photo-sphere-viewer.js"></script>
+
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<div style="height: 100%;">
+    <div id="viewer"></div>
+</div>
+<script>
+
+    var panorama1 = 'images/timg.jpg';
+    var loadPSV = function(panorama){
+        var psv = new PhotoSphereViewer({
+            // 全景图片路径
+            //panorama: 'images/Bryce-Canyon-National-Park-Mark-Doliner.jpg',
+            panorama: panorama,
+            // 容器
+            container: 'viewer',
+            loading_img: 'images/photosphere-logo.gif',
+            //标题
+            caption: "",
+            // 关闭动画
+            time_anim: false,
+            default_fov: 70,
+            default_lat: 0.3,
+            //mousewheel: false,
+            //touchmove_two_fingers: true,
+            time_anim: false,
+            //鱼眼镜头
+            //fisheye:true,
+            // 显示导航栏
+            //navbar: true,
+            //  自定义导航的顺序
+            navbar:  [
+                'autorotate',
+                'zoom',
+                'markers',
+                /*{
+                    id: 'my-button',
+                    title: 'Hello world',
+                    className: 'custom-button',
+                    content: 'Custom<a href="xxxxx" target="_blank">helloworld</a>'
+                },*/
+                'caption',
+                'fullscreen'
+            ],
+            //按钮提示
+            /*lang: {
+                autorotate: 'Automatic rotation',
+                zoom: 'Zoom',
+                zoomOut: 'Zoom out',
+                zoomIn: 'Zoom in',
+                download: 'Download',
+                fullscreen: 'Fullscreen',
+                markers: 'Markers',
+                gyroscope: 'Gyroscope'
+            },*/
+            // 设置画布大小
+            size: {
+                //width: '100%',
+                //height: '323px'
+                height: '100%'
+            },
+            //  启用陀螺仪
+            //gyroscope:false
+            //  准备就绪就执行
+            //  onready:Ready,
+            // 标记列表
+            markers: [{
+                // 当单击时打开面板的图像标记
+                id: 'image',
+                longitude: 5.69810,
+                latitude: -0.13770,
+                image: 'images/marks/pin3.png',
+                width: 32,
+                height: 32,
+                anchor: 'bottom center',
+                tooltip: '我的标记点'
+            }, {
+                // html marker with custom style
+                id: 'image2',
+                longitude: 0,
+                image: 'images/marks/pin3.png',
+                width: 32,
+                height: 32,
+                latitude: 0,
+                // html: 'HTML <b>marker</b> &hearts;',
+                anchor: 'bottom right',
+                scale: [0.5, 1.5],
+                style: {
+                    maxWidth: '100px',
+                    color: 'white',
+                    fontSize: '20px',
+                    fontFamily: 'Helvetica, sans-serif',
+                    textAlign: 'center'
+                },
+                tooltip: {
+                    content: 'An HTML marker',
+                    position: 'right'
+                }
+            }]
+
+        });
+
+        return psv;
+    };
+
+    var psv = loadPSV(panorama1);
+    console.log(psv.setPanorama('images/Bryce-Canyon-National-Park-Mark-Doliner.jpg'));
+    psv.addMarker({
+        id: '#' + Math.random(),
+        longitude: 5,
+        latitude: 0,
+        image: 'images/marks/pin3.png',
+        width: 32,
+        height: 32,
+        anchor: 'bottom center',
+        tooltip: 'Generated pin',
+        data: {
+            generated: true
+        }
+    });
+
+    psv.on('select-marker', function(marker) {
+        if (marker.data && marker.data.generated) {
+           loadPSV('images/Bryce-Canyon-National-Park-Mark-Doliner.jpg');
+        }
+    });
+</script>
+</body>
+</html>
